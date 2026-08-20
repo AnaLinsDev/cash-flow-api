@@ -7,5 +7,15 @@ using System.Threading.Tasks;
 namespace CashFlow.Communication.Responses;
 public class ResponseErrorJson
 {
-    public required string ErrorMessage { get; set; } = string.Empty;
+    public List<string> ErrorMessage { get; set; }
+
+    public ResponseErrorJson(List<string> messages)
+    {
+        ErrorMessage = messages;
+    }
+
+    public ResponseErrorJson(string message)
+    {
+        ErrorMessage = [message];
+    }
 }
