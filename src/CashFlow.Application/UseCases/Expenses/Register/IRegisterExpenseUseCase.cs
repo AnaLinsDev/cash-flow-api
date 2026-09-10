@@ -6,3 +6,4 @@ public interface IRegisterExpenseUseCase
 {
     Task<ResponseRegisterExpenseJson> Execute(RequestRegisterExpenseJson request);
 }
+ 
