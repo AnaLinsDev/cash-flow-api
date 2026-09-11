@@ -1,20 +1,19 @@
 ﻿using AutoMapper;
 using CashFlow.Communication.Requests;
-using CashFlow.Communication.Responses;
-using CashFlow.Domain.Entities;
 using CashFlow.Domain.Repositories;
 using CashFlow.Domain.Repositories.Expenses;
+using CashFlow.Exception;
 using CashFlow.Exception.ExceptionsBase;
 
-namespace CashFlow.Application.UseCases.Expenses.Register;
-public class RegisterExpenseUseCase : IRegisterExpenseUseCase
+namespace CashFlow.Application.UseCases.Expenses.Update;
+public class UpdateExpenseByIdUseCase : IUpdateExpenseByIdUseCase
 {
-    private readonly IExpensesWriteOnlyRepository _repository;
+    private readonly IExpensesUpdateOnlyRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public RegisterExpenseUseCase(
-        IExpensesWriteOnlyRepository repository, 
+    public UpdateExpenseByIdUseCase(
+        IExpensesUpdateOnlyRepository repository,
         IUnitOfWork unitOfWork,
         IMapper mapper)
     {
@@ -22,17 +21,22 @@ public class RegisterExpenseUseCase : IRegisterExpenseUseCase
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
-    public async Task<ResponseRegisterExpenseJson> Execute(RequestExpenseJson request)
+    public async Task Execute(long id, RequestExpenseJson request)
     {
-
         Validate(request);
 
-        var entity = _mapper.Map<Expense>(request);
+        var expense = await _repository.GetById(id);
 
-        await _repository.Add(entity);
+        if (expense == null)
+        {
+            throw new NotFoundException(ResourceErrorMessages.EXPENSE_NOT_FOUND);
+        }
+
+        _mapper.Map(request, expense);
+
+        _repository.Update(expense);
+
         await _unitOfWork.Commit();
-
-        return _mapper.Map<ResponseRegisterExpenseJson>(entity);
     }
 
     private void Validate(RequestExpenseJson request)
@@ -47,7 +51,5 @@ public class RegisterExpenseUseCase : IRegisterExpenseUseCase
 
             throw new ErrorOnValidationException(errorMessages);
         }
-
     }
 }
-
