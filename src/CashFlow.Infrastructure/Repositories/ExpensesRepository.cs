@@ -49,4 +49,28 @@ internal class ExpensesRepository : IExpensesWriteOnlyRepository, IExpensesReadO
     {
         _dbContext.Expenses.Update(expense);
     }
+
+    public async Task<List<Expense>> FilterByMonth(DateOnly date)
+    {
+        var startDate = new DateTime(
+            date.Year,
+            date.Month,
+            1,
+            0,
+            0,
+            0,
+            DateTimeKind.Utc);
+
+        var endDate = startDate.AddMonths(1);
+
+        return await _dbContext
+            .Expenses
+            .AsNoTracking()
+            .Where(expense =>
+                expense.Date >= startDate &&
+                expense.Date < endDate)
+            .OrderBy(expense => expense.Date)
+            .ThenBy(expense => expense.Title)
+            .ToListAsync();
+    }
 }
