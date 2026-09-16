@@ -141,6 +141,9 @@
   <data name="EXPENSES_FOR" xml:space="preserve">
     <value>Dépenses de</value>
   </data>
+  <data name="GREETINGS" xml:space="preserve">
+    <value>Salut, {0}</value>
+  </data>
   <data name="PAYMENT_TYPE" xml:space="preserve">
     <value>Type de paiement</value>
   </data>

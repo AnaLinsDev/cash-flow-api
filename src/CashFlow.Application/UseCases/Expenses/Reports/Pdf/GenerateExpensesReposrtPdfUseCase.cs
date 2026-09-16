@@ -5,6 +5,7 @@ using CashFlow.Domain.Repositories.Expenses;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.Rendering;
 using PdfSharp.Fonts;
+using System.Reflection;
 
 namespace CashFlow.Application.UseCases.Expenses.Reports.Pdf;
 public class GenerateExpensesReposrtPdfUseCase : IGenerateExpensesReposrtPdfUseCase
@@ -30,29 +31,10 @@ public class GenerateExpensesReposrtPdfUseCase : IGenerateExpensesReposrtPdfUseC
         var document = CreateDocument(month);
         var page = CreatePage(document);
 
-        var paragraph = page.AddParagraph();
-        var title = String.Format(ResourceReportGenerationMessages.TOTAL_SPENT_IN, month.ToString("Y"));
-
-        paragraph.AddFormattedText(
-            title,
-            new Font
-            {
-                Name = FontHelper.RALEWAY_REGULAR,
-                Size = 15
-            });
-
-        paragraph.AddLineBreak();
+        CreateHeaderWithLogoAndName(page);
 
         var totalExpenses = expenses.Sum(expenses => expenses.Amount);
-        var totalExpensesFormatted = $"{totalExpenses} {CURRENCY_SYMBOL}";
-
-        paragraph.AddFormattedText(
-            totalExpensesFormatted,
-            new Font
-            {
-                Name = FontHelper.WORKSANS_BLACK,
-                Size = 50
-            });
+        CreateTotalSpentSection(page, month, totalExpenses);
 
         return RenderDocument(document);
     }
@@ -82,6 +64,60 @@ public class GenerateExpensesReposrtPdfUseCase : IGenerateExpensesReposrtPdfUseC
         section.PageSetup.BottomMargin = 80;
 
         return section;
+    }
+
+    private void CreateHeaderWithLogoAndName(Section page)
+    {
+        var table = page.AddTable();
+        table.AddColumn(); // [0]
+        table.AddColumn("300"); // [1]
+
+        var greetings = String.Format(ResourceReportGenerationMessages.GREETINGS, "Ana Julia Lins");
+
+        var assembly = Assembly.GetExecutingAssembly();
+        var directoryName = Path.GetDirectoryName(assembly.Location);
+        var pathFile = Path.Combine(directoryName!, "Logo", "logo.png");
+
+
+        var row = table.AddRow();
+        row.Cells[0].AddImage(pathFile);
+        row.Cells[1].AddParagraph(greetings);
+        row.Cells[1].Format.Font = new Font
+        {
+            Name = FontHelper.RALEWAY_BLACK,
+            Size = 16
+        };
+        row.Cells[1].VerticalAlignment = MigraDoc.DocumentObjectModel.Tables.VerticalAlignment.Center;
+    }
+
+    private void CreateTotalSpentSection(Section page, DateOnly month, decimal totalExpenses)
+    {
+        var paragraph = page.AddParagraph();
+        paragraph.Format.SpaceBefore = "40";
+        paragraph.Format.SpaceAfter = "40";
+
+        var title = String.Format(ResourceReportGenerationMessages.TOTAL_SPENT_IN, month.ToString("Y"));
+
+        paragraph.AddFormattedText(
+            title,
+            new Font
+            {
+                Name = FontHelper.RALEWAY_REGULAR,
+                Size = 15
+            });
+
+        paragraph.AddLineBreak();
+
+        var totalExpensesFormatted = $"{totalExpenses} {CURRENCY_SYMBOL}";
+
+        paragraph.AddFormattedText(
+            totalExpensesFormatted,
+            new Font
+            {
+                Name = FontHelper.WORKSANS_BLACK,
+                Size = 50
+            });
+
     }
 
     private byte[] RenderDocument(Document document)
