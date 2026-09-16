@@ -2,7 +2,7 @@
 
 A RESTful Web API built with **C# and ASP.NET Core** for managing expenses.
 
-This project was developed **primarily to understand how to manage database and entities using dependency injection extensions**, while also exploring concepts such as business rules, input validation, exception handling, and global exception filter.
+This project was developed **primarily to understand how to manage database and entities using dependency injection extensions and also generating EXCEL and PDF reports**, while also exploring concepts such as business rules, input validation, exception handling, and global exception filter.
 
 ## Technologies
 
@@ -20,6 +20,8 @@ This project was developed **primarily to understand how to manage database and 
 - Create expense
 - Update a expense
 - Delete a expense
+- Download Excel report by month
+- Download PDF report by month
 - Business rule validation
 - Status and Priority validation
 - HTTP status code handling
@@ -42,6 +44,8 @@ For this project, the following layered architecture was adopted:
 |---|---|---|
 | GET | `/api/expenses` | Get all expenses |
 | GET | `/api/expenses/{id}` | Get a expense by ID |
+| GET | `/api/reports/excel?month=2026-09` | Get expenses by the year-month and download the Excel report  |
+| GET | `/api/reports/pdf?month=2026-09` | Get expenses by the year-month and download the PDF report  |
 | POST | `/api/expenses` | Create a expense |
 | PUT | `/api/expenses/{id}` | Update a expense |
 | DELETE | `/api/expenses/{id}` | Delete a expense |
@@ -60,10 +64,11 @@ Through this project, I practiced:
 - Debugging with Visual Studio
 - API documentation with Swagger
 - Implement dependency injection
+- How to use the MigraDoc to create and style a PDF report
+- How to use the ClosedXML to create and style an Excel report
 
 ## Next Steps
 
-- Add reports (Excel and PDF)
-- Implement unit tests
+- Implement tests
 - Add authentication
 - Add authorization for specific endpoints
