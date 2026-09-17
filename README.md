@@ -4,6 +4,8 @@ A RESTful Web API built with **C# and ASP.NET Core** for managing expenses.
 
 This project was developed **primarily to understand how to manage database and entities using dependency injection extensions and also generating EXCEL and PDF reports**, while also exploring concepts such as business rules, input validation, exception handling, and global exception filter.
 
+![][main-image]
+
 ## Technologies
 
 - C#
@@ -15,17 +17,13 @@ This project was developed **primarily to understand how to manage database and 
 
 ## Features
 
-- List all expenses
-- Get a expense by ID
-- Create expense
-- Update a expense
-- Delete a expense
+- CRUD expenses
 - Download Excel report by month
 - Download PDF report by month
 - Business rule validation
 - Status and Priority validation
-- HTTP status code handling
 - Exception filter
+- Swagger documentation (HTTP status code handling)
 
 ## Layered Architecture
 
@@ -69,6 +67,65 @@ Through this project, I practiced:
 
 ## Next Steps
 
-- Implement tests
+- Create the Migrations
+- Implement unit tests
 - Add authentication
 - Add authorization for specific endpoints
+
+## How to run
+
+### Requirements
+* Visual Studio version 2022+ or Visual Studio Code
+* Windows 10+ or ​​Linux/MacOS with .NET SDK 8.0 or 9.0 installed
+* PostgreSQL
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/AnaLinsDev/cash-flow-api.git
+```
+
+### 2. Navigate to the project
+
+```bash
+cd cash-flow-api
+```
+
+### 3. Add your DB_PATH
+
+Fill in the database information in the `appsettings.Development.json` file inside the CashFlow.API.
+
+### 4. Restore dependencies
+
+```bash
+dotnet restore
+```
+
+### 5. Build the project
+
+```bash
+dotnet build
+```
+
+### 6. Creating database tables
+
+// Here will be added the steps to run the migrations, but it will be added in the next steps
+
+### 7. Run the API
+
+```bash
+dotnet run --project src/CashFlow.API
+```
+
+The terminal will display the URL where the API is running.
+
+### 8. Open Swagger
+
+Open the Swagger URL displayed by the application in your browser.
+
+Swagger can be used to test the available API endpoints without requiring Postman or another API client.
+
+<!-- Images -->
+[main-image]: images/readme_image.png
