@@ -8,9 +8,7 @@ using CashFlow.Domain.Repositories.Expenses;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.Rendering;
-using PdfSharp.Drawing;
 using PdfSharp.Fonts;
-using System.Globalization;
 using System.Reflection;
 
 namespace CashFlow.Application.UseCases.Expenses.Reports.Pdf;
