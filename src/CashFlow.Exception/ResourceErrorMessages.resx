@@ -147,4 +147,7 @@
   <data name="INVALID_PASSWORD" xml:space="preserve">
     <value>Your password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one number.</value>
   </data>
+  <data name="EMAIL_ALREADY_REGISTERED" xml:space="preserve">
+    <value>The provided email is already registered</value>
+  </data>
 </root>
