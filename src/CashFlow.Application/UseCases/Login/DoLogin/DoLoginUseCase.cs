@@ -1,9 +1,12 @@
-﻿using CashFlow.Communication.Requests;
+﻿using CashFlow.Application.UseCases.Users.Register;
+using CashFlow.Communication.Requests;
 using CashFlow.Communication.Responses;
 using CashFlow.Domain.Repositories.Users;
 using CashFlow.Domain.Security.Cryptography;
 using CashFlow.Domain.Security.Tokens;
+using CashFlow.Exception;
 using CashFlow.Exception.ExceptionsBase;
+using System.ComponentModel.DataAnnotations;
 
 namespace CashFlow.Application.UseCases.Login.DoLogin;
 public class DoLoginUseCase : IDoLoginUseCase
@@ -24,6 +27,8 @@ public class DoLoginUseCase : IDoLoginUseCase
 
     public async Task<ResponseRegisteredUserJson> Execute(RequestLoginJson request)
     {
+        Validate(request);
+
         var user = await _repository.GetUserByEmail(request.Email);
 
         if (user is null)
@@ -43,5 +48,17 @@ public class DoLoginUseCase : IDoLoginUseCase
             Name = user.Name,
             Token = _accessTokenGenerator.Generate(user)
         };
+    }
+
+    private static void Validate(RequestLoginJson request)
+    {
+        var result = new DoLoginValidator().Validate(request);
+
+        if (result.IsValid == false)
+        {
+            var errorMessages = result.Errors.Select(f => f.ErrorMessage).ToList();
+
+            throw new ErrorOnValidationException(errorMessages);
+        }
     }
 }
