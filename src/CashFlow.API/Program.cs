@@ -17,7 +17,7 @@ builder.Services.AddSwaggerGen(config =>
     config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Description = "Informe o token JWT no formato: Bearer {seu_token}",
+        Description = "Enter the JWT token in the format: Bearer {your_token}",
         In = ParameterLocation.Header,
         Scheme = "Bearer",
         Type = SecuritySchemeType.Http,
@@ -69,7 +69,7 @@ app.UseMiddleware<CultureMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllers();
 
